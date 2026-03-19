@@ -175,17 +175,9 @@ function renderChain(q) {
       if (e.key === "Enter") gradeAnswers();
     });
 
-    const ruleInput = document.createElement("input");
-    ruleInput.type = "text";
-    ruleInput.className = "rule-input";
-    ruleInput.setAttribute("data-step", i);
-    ruleInput.setAttribute("autocomplete", "off");
-    ruleInput.setAttribute("autocorrect", "off");
-    ruleInput.setAttribute("spellcheck", "false");
-    ruleInput.placeholder = step.rule; // 힌트로 규칙 표시
-    ruleInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") gradeAnswers();
-    });
+    const ruleInput = document.createElement("span");
+    ruleInput.className = "rule-badge";
+    ruleInput.textContent = step.rule;
 
     const label = document.createElement("span");
     label.className = "word-label";
@@ -201,25 +193,18 @@ function renderChain(q) {
 function gradeAnswers() {
   if (!currentQ) return;
   const wordInputs = wordChain.querySelectorAll(".word-input");
-  const ruleInputs = wordChain.querySelectorAll(".rule-input");
 
   let allCorrect = true;
   let anyAnswered = false;
 
   currentQ.steps.forEach((step, i) => {
     const wi = wordInputs[i];
-    const ri = ruleInputs[i];
-
     const wordVal = wi.value.trim();
-    const ruleVal = ri.value.trim();
 
-    // 최소 하나라도 입력했는지 확인
-    if (wordVal || ruleVal) anyAnswered = true;
+    if (wordVal) anyAnswered = true;
 
     const wordOk = wordVal === step.result;
-    const ruleOk = ruleVal === step.rule;
 
-    // 발음 채점
     wi.classList.remove("correct", "wrong", "empty");
     if (!wordVal) {
       wi.classList.add("empty");
@@ -228,18 +213,6 @@ function gradeAnswers() {
       wi.classList.add("correct");
     } else {
       wi.classList.add("wrong");
-      allCorrect = false;
-    }
-
-    // 규칙 채점
-    ri.classList.remove("correct", "wrong", "empty");
-    if (!ruleVal) {
-      ri.classList.add("empty");
-      allCorrect = false;
-    } else if (ruleOk) {
-      ri.classList.add("correct");
-    } else {
-      ri.classList.add("wrong");
       allCorrect = false;
     }
   });
@@ -270,12 +243,9 @@ function gradeAnswers() {
 function showAnswer() {
   if (!currentQ) return;
   const wordInputs = wordChain.querySelectorAll(".word-input");
-  const ruleInputs = wordChain.querySelectorAll(".rule-input");
   currentQ.steps.forEach((step, i) => {
     wordInputs[i].value = step.result;
-    ruleInputs[i].value = step.rule;
     wordInputs[i].classList.add("revealed");
-    ruleInputs[i].classList.add("revealed");
   });
   showResult("정답을 확인하세요.", "info");
 }
