@@ -33,7 +33,7 @@ const QUIZ_DATA = [
   { word: "맑디맑다",  steps: [{ result: "말디맑다", rule: "단" },   { result: "말디말다", rule: "단" }, { result: "말디말따", rule: "된" }] },
   { word: "읽고쓰다",  steps: [{ result: "익고쓰다", rule: "단" },   { result: "익꼬쓰다", rule: "된" }] },
   { word: "넓죽하다",  steps: [{ result: "넙죽하다", rule: "단" },   { result: "넙쭈카다", rule: "된+축" }] },
-  { word: "밝디밝다",  steps: [{ result: "발디밝다", rule: "단" },   { result: "발디발다", rule: "단" }, { result: "발디발따", rule: "된" }] },
+  { word: "밝디밝다",  steps: [{ result: "박디밝다", rule: "단" },   { result: "박디발다", rule: "단" }, { result: "박디발따", rule: "된" }] },
   { word: "굵직하다",  steps: [{ result: "국직하다", rule: "단" },   { result: "국찌카다", rule: "된+축" }] },
   { word: "긁적거리다", steps: [{ result: "극적거리다", rule: "단" }, { result: "극쩍거리다", rule: "된" }] },
   { word: "얹히다",    steps: [{ result: "언히다",  rule: "단" },   { result: "어니다",  rule: "축" }] },
@@ -94,8 +94,15 @@ startBtn.addEventListener("click", () => {
 
 gradeBtn.addEventListener("click", gradeAnswers);
 skipBtn.addEventListener("click", () => {
-  showAnswer();
-  setTimeout(() => nextQuestion(), 1800);
+  if (skipBtn.dataset.answered === "true") {
+    nextQuestion();
+    skipBtn.dataset.answered = "false";
+    skipBtn.textContent = "건너뛰기";
+  } else {
+    showAnswer();
+    skipBtn.dataset.answered = "true";
+    skipBtn.textContent = "다음 문제 →";
+  }
 });
 
 infoBtn.addEventListener("click", () => {
@@ -130,6 +137,8 @@ function nextQuestion() {
   renderChain(currentQ);
   gradeBtn.disabled = false;
   gradeBtn.textContent = "채점하기";
+  skipBtn.dataset.answered = "false";
+  skipBtn.textContent = "건너뛰기";
   updateProgress();
 }
 
