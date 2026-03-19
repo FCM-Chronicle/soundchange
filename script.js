@@ -44,7 +44,6 @@ const QUIZ_DATA = [
 { "word": "끓여내다", "steps": [{ "result": "끄려내다", "rule": "ㅎ탈+연" }] },
 { "word": "잃어버리다", "steps": [{ "result": "이러버리다", "rule": "ㅎ탈+연" }] },
 { "word": "밟히다", "steps": [{ "result": "발피다", "rule": "축" }] },
-{ "word": "곪히다", "steps": [{ "result": "골미다", "rule": "ㅎ탈+연" }] },
 { "word": "읽히다", "steps": [{ "result": "일키다", "rule": "축" }] },
 { "word": "넓혀지다", "steps": [{ "result": "널펴지다", "rule": "축" }] },
 { "word": "값나가다", "steps": [{ "result": "갑나가다", "rule": "단" }, { "result": "감나가다", "rule": "비" }] },
