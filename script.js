@@ -1,155 +1,284 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>음운 변동 퀴즈</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
-</head>
-<body>
+// ============================================================
+//  데이터: 각 단어의 음운 변동 단계
+//  { word: 초기단어, steps: [{result: 변동결과, rule: 규칙약어}, ...] }
+// ============================================================
+const QUIZ_DATA = [
+  { word: "겉늙다",    steps: [{ result: "걷늑다",  rule: "끝+단" }, { result: "걷늑따", rule: "된" }, { result: "건늑따", rule: "비" }] },
+  { word: "값있다",    steps: [{ result: "갑읻다",  rule: "단+끝" }, { result: "갑읻따", rule: "된" }, { result: "가빋따", rule: "비" }] },
+  { word: "값없다",    steps: [{ result: "갑업다",  rule: "단+끝" }, { result: "갑업따", rule: "된" }, { result: "가법따", rule: "비" }] },
+  { word: "넓적하다",  steps: [{ result: "넙적하다", rule: "단" },   { result: "넙쩌카다", rule: "된+축" }] },
+  { word: "넓적하니",  steps: [{ result: "넙적하니", rule: "단" },   { result: "넙쩌카니", rule: "된+축" }] },
+  { word: "굵다랗다",  steps: [{ result: "국다라타", rule: "단+축" }, { result: "국따라타", rule: "된" }] },
+  { word: "급행열차",  steps: [{ result: "급행녈차", rule: "ㄴ" },   { result: "그팽녈차", rule: "축" }] },
+  { word: "설익다",    steps: [{ result: "설닉다",  rule: "ㄴ" },   { result: "설릭다",  rule: "유" }, { result: "설릭따", rule: "된" }] },
+  { word: "낱낱이",    steps: [{ result: "낟나티",  rule: "끝" },   { result: "난나티",  rule: "비" }, { result: "난나치", rule: "구" }] },
+  { word: "놓습니다",  steps: [{ result: "녿습니다", rule: "끝" },   { result: "녿씁니다", rule: "된" }, { result: "녿씀니다", rule: "비" }] },
+  { word: "내복약",    steps: [{ result: "내복냑",  rule: "ㄴ" },   { result: "내봉냑",  rule: "비" }] },
+  { word: "늑막염",    steps: [{ result: "늑막념",  rule: "ㄴ" },   { result: "능망념",  rule: "비" }] },
+  { word: "긁히다",    steps: [{ result: "극히다",  rule: "단" },   { result: "그키다",  rule: "축" }] },
+  { word: "읽혀지다",  steps: [{ result: "익혀지다", rule: "단" },   { result: "이켜지다", rule: "축" }] },
+  { word: "밝혀지다",  steps: [{ result: "발혀지다", rule: "단" },   { result: "바켜지다", rule: "축" }] },
+  { word: "짧디짧다",  steps: [{ result: "짤디짧다", rule: "단" },   { result: "짤디짤다", rule: "단" }, { result: "짤디짤따", rule: "된" }] },
+  { word: "넓디넓다",  steps: [{ result: "넓디넙다", rule: "단" },   { result: "넙디넙다", rule: "단" }, { result: "넙디넙따", rule: "된" }] },
+  { word: "흙투성이",  steps: [{ result: "흑투성이", rule: "단" },   { result: "흑뚜성이", rule: "된" }] },
+  { word: "낱낱이도",  steps: [{ result: "낟나티도", rule: "끝" },   { result: "난나티도", rule: "비" }, { result: "난나치도", rule: "구" }, { result: "난나치또", rule: "된" }] },
+  { word: "끝낱이",    steps: [{ result: "끋나티",  rule: "끝" },   { result: "끈나티",  rule: "비" }, { result: "끈나치", rule: "구" }] },
+  { word: "몫없다",    steps: [{ result: "목없다",  rule: "단" },   { result: "목업다",  rule: "끝" }, { result: "모겁다", rule: "비" }] },
+  { word: "닭도리탕",  steps: [{ result: "닥도리탕", rule: "단" },   { result: "닥또리탕", rule: "된" }] },
+  { word: "볶음밥",    steps: [{ result: "복음밥",  rule: "끝" },   { result: "봉음밥",  rule: "비" }] },
+  { word: "삶히다",    steps: [{ result: "삼히다",  rule: "단" },   { result: "사미다",  rule: "축" }] },
+  { word: "넋없다",    steps: [{ result: "넉없다",  rule: "단" },   { result: "넉업다",  rule: "끝" }, { result: "너겁다", rule: "비" }] },
+  { word: "흙일",      steps: [{ result: "흑일",   rule: "단" },   { result: "흑닐",   rule: "ㄴ" }, { result: "흥닐", rule: "비" }] },
+  { word: "닭잡다",    steps: [{ result: "닥잡다",  rule: "단" },   { result: "닥짭다",  rule: "된" }] },
+  { word: "맑디맑다",  steps: [{ result: "말디맑다", rule: "단" },   { result: "말디말다", rule: "단" }, { result: "말디말따", rule: "된" }] },
+  { word: "읽고쓰다",  steps: [{ result: "익고쓰다", rule: "단" },   { result: "익꼬쓰다", rule: "된" }] },
+  { word: "넓죽하다",  steps: [{ result: "넙죽하다", rule: "단" },   { result: "넙쭈카다", rule: "된+축" }] },
+  { word: "밝디밝다",  steps: [{ result: "발디밝다", rule: "단" },   { result: "발디발다", rule: "단" }, { result: "발디발따", rule: "된" }] },
+  { word: "굵직하다",  steps: [{ result: "국직하다", rule: "단" },   { result: "국찌카다", rule: "된+축" }] },
+  { word: "긁적거리다", steps: [{ result: "극적거리다", rule: "단" }, { result: "극쩍거리다", rule: "된" }] },
+  { word: "얹히다",    steps: [{ result: "언히다",  rule: "단" },   { result: "어니다",  rule: "축" }] },
+  { word: "앉히다",    steps: [{ result: "안히다",  rule: "단" },   { result: "아니다",  rule: "축" }] },
+  { word: "훑어보다",  steps: [{ result: "훌어보다", rule: "단" },   { result: "훌러보다", rule: "유" }] },
+  { word: "핥아먹다",  steps: [{ result: "할아먹다", rule: "단" },   { result: "할아먹따", rule: "된" }] },
+  { word: "읊어대다",  steps: [{ result: "읍어대다", rule: "단" },   { result: "으버대다", rule: "비" }] },
+  { word: "끓여내다",  steps: [{ result: "끌여내다", rule: "ㅎ탈" }, { result: "끌녀내다", rule: "ㄴ" }, { result: "끌려내다", rule: "유" }] },
+  { word: "잃어버리다", steps: [{ result: "일어버리다", rule: "ㅎ탈" }, { result: "이러버리다", rule: "유" }] },
+  { word: "밟히다",    steps: [{ result: "밥히다",  rule: "단" },   { result: "바피다",  rule: "축" }] },
+  { word: "곪히다",    steps: [{ result: "골히다",  rule: "단" },   { result: "고리다",  rule: "축" }] },
+  { word: "읽히다",    steps: [{ result: "익히다",  rule: "단" },   { result: "이키다",  rule: "축" }] },
+  { word: "넓혀지다",  steps: [{ result: "넙혀지다", rule: "단" },   { result: "너펴지다", rule: "축" }] },
+  { word: "값나가다",  steps: [{ result: "갑나가다", rule: "단" },   { result: "감나가다", rule: "비" }] },
+  { word: "닭볶음",    steps: [{ result: "닥볶음",  rule: "단" },   { result: "닥뽀끔",  rule: "된" }] },
+  { word: "삶아먹다",  steps: [{ result: "살마먹다", rule: "단" },   { result: "살마먹따", rule: "된" }] },
+  { word: "끝맺다",    steps: [{ result: "끋맺다",  rule: "끝" },   { result: "끈맺다",  rule: "비" }, { result: "끈맫따", rule: "된" }] },
+];
 
-  <!-- 배경 장식 -->
-  <div class="bg-deco">
-    <div class="circle c1"></div>
-    <div class="circle c2"></div>
-    <div class="circle c3"></div>
-  </div>
+document.addEventListener("DOMContentLoaded", () => {
 
-  <!-- 정보 모달 -->
-  <div id="info-modal" class="modal-overlay" aria-hidden="true">
-    <div class="modal-box">
-      <button class="modal-close" id="modal-close-btn" aria-label="닫기">✕</button>
-      <h2 class="modal-title">음운 변동 기호 안내</h2>
-      <div class="legend-grid">
-        <div class="legend-item">
-          <span class="tag-badge">끝</span>
-          <div>
-            <strong>끝소리 규칙</strong>
-            <p>받침에서 발음될 수 있는 자음은 ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ ㅇ 7개뿐. 그 외 받침은 이 7개 중 하나로 바뀜.</p>
-          </div>
-        </div>
-        <div class="legend-item">
-          <span class="tag-badge">단</span>
-          <div>
-            <strong>자음군 단순화</strong>
-            <p>겹받침(ㄳ ㄵ ㄶ ㄺ ㄻ ㄼ ㄽ ㄾ ㄿ ㅀ ㅄ 등)이 음절 말에서 하나의 자음으로 줄어드는 현상.</p>
-          </div>
-        </div>
-        <div class="legend-item">
-          <span class="tag-badge">된</span>
-          <div>
-            <strong>된소리되기 (경음화)</strong>
-            <p>예사소리(ㄱ ㄷ ㅂ ㅅ ㅈ)가 특정 환경에서 된소리(ㄲ ㄸ ㅃ ㅆ ㅉ)로 바뀌는 현상.</p>
-          </div>
-        </div>
-        <div class="legend-item">
-          <span class="tag-badge">비</span>
-          <div>
-            <strong>비음화</strong>
-            <p>파열음(ㄱ ㄷ ㅂ)이 비음(ㄴ ㅁ) 앞에서 같은 위치의 비음(ㅇ ㄴ ㅁ)으로 바뀌는 현상.</p>
-          </div>
-        </div>
-        <div class="legend-item">
-          <span class="tag-badge">유</span>
-          <div>
-            <strong>유음화</strong>
-            <p>ㄴ이 ㄹ의 앞 또는 뒤에서 ㄹ로 바뀌는 현상 (ㄹ + ㄴ → ㄹ + ㄹ, ㄴ + ㄹ → ㄹ + ㄹ).</p>
-          </div>
-        </div>
-        <div class="legend-item">
-          <span class="tag-badge">구</span>
-          <div>
-            <strong>구개음화</strong>
-            <p>ㄷ, ㅌ이 'ㅣ' 모음 앞에서 ㅈ, ㅊ으로 바뀌는 현상.</p>
-          </div>
-        </div>
-        <div class="legend-item">
-          <span class="tag-badge">축</span>
-          <div>
-            <strong>축약 (거센소리되기)</strong>
-            <p>ㅎ과 예사소리(ㄱ ㄷ ㅂ ㅈ)가 만나 거센소리(ㅋ ㅌ ㅍ ㅊ)로 합쳐지는 현상.</p>
-          </div>
-        </div>
-        <div class="legend-item">
-          <span class="tag-badge">ㄴ</span>
-          <div>
-            <strong>ㄴ 첨가</strong>
-            <p>합성어·파생어에서 앞말이 자음으로 끝나고 뒷말이 모음 'ㅣ'나 반모음 'ㅣ'로 시작할 때 ㄴ이 첨가되는 현상.</p>
-          </div>
-        </div>
-        <div class="legend-item">
-          <span class="tag-badge">ㅎ탈</span>
-          <div>
-            <strong>ㅎ 탈락</strong>
-            <p>ㅎ 받침이 모음으로 시작하는 어미 앞에서 발음되지 않고 탈락하는 현상.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+// ============================================================
+//  상태
+// ============================================================
+let currentQ = null;
+let usedIndices = [];
+let scoreCorrect = 0;
+let scoreTotal = 0;
+let streak = 0;
 
-  <!-- 메인 -->
-  <main class="container">
-    <header class="site-header">
-      <div class="header-top">
-        <span class="site-label">한국어</span>
-        <button class="info-btn" id="info-btn" aria-label="기호 설명">i</button>
-      </div>
-      <h1 class="site-title">음운 변동 퀴즈</h1>
-      <p class="site-sub">단어의 음운 변동 과정을 순서대로 채워보세요</p>
-    </header>
+// ============================================================
+//  DOM
+// ============================================================
+const startScreen  = document.getElementById("start-screen");
+const quizContent  = document.getElementById("quiz-content");
+const startBtn     = document.getElementById("start-btn");
+const gradeBtn     = document.getElementById("grade-btn");
+const skipBtn      = document.getElementById("skip-btn");
+const wordChain    = document.getElementById("word-chain");
+const resultMsg    = document.getElementById("result-msg");
+const progressBar  = document.getElementById("progress-bar");
+const infoBtn      = document.getElementById("info-btn");
+const infoModal    = document.getElementById("info-modal");
+const modalCloseBtn = document.getElementById("modal-close-btn");
 
-    <!-- 점수판 -->
-    <div class="scoreboard">
-      <div class="score-item">
-        <span class="score-num" id="score-correct">0</span>
-        <span class="score-label">정답</span>
-      </div>
-      <div class="score-divider"></div>
-      <div class="score-item">
-        <span class="score-num" id="score-total">0</span>
-        <span class="score-label">시도</span>
-      </div>
-      <div class="score-divider"></div>
-      <div class="score-item">
-        <span class="score-num" id="score-streak">0</span>
-        <span class="score-label">연속</span>
-      </div>
-    </div>
+const elCorrect = document.getElementById("score-correct");
+const elTotal   = document.getElementById("score-total");
+const elStreak  = document.getElementById("score-streak");
 
-    <!-- 퀴즈 카드 -->
-    <div class="quiz-card" id="quiz-card">
-      <div class="start-screen" id="start-screen">
-        <div class="start-icon">가</div>
-        <p class="start-msg">음운 변동의 단계별 과정을<br>맞혀보세요!</p>
-        <button class="btn-start" id="start-btn">문제 풀기</button>
-      </div>
+// ============================================================
+//  이벤트
+// ============================================================
+startBtn.addEventListener("click", () => {
+  startScreen.style.display = "none";
+  quizContent.style.display = "block";
+  nextQuestion();
+});
 
-      <div class="quiz-content" id="quiz-content" style="display:none;">
-        <div class="progress-bar-wrap">
-          <div class="progress-bar" id="progress-bar"></div>
-        </div>
+gradeBtn.addEventListener("click", gradeAnswers);
+skipBtn.addEventListener("click", () => {
+  showAnswer();
+  setTimeout(() => nextQuestion(), 1800);
+});
 
-        <div class="word-chain" id="word-chain">
-          <!-- JS로 동적 생성 -->
-        </div>
+infoBtn.addEventListener("click", () => {
+  infoModal.setAttribute("aria-hidden", "false");
+  infoModal.classList.add("active");
+});
+modalCloseBtn.addEventListener("click", closeModal);
+infoModal.addEventListener("click", (e) => { if (e.target === infoModal) closeModal(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
-        <div class="btn-row">
-          <button class="btn-grade" id="grade-btn">채점하기</button>
-          <button class="btn-skip" id="skip-btn">건너뛰기</button>
-        </div>
+function closeModal() {
+  infoModal.setAttribute("aria-hidden", "true");
+  infoModal.classList.remove("active");
+}
 
-        <div class="result-msg" id="result-msg"></div>
-      </div>
-    </div>
+// ============================================================
+//  퀴즈 로직
+// ============================================================
+function getRandomQuestion() {
+  if (usedIndices.length === QUIZ_DATA.length) usedIndices = [];
+  let idx;
+  do { idx = Math.floor(Math.random() * QUIZ_DATA.length); }
+  while (usedIndices.includes(idx));
+  usedIndices.push(idx);
+  return QUIZ_DATA[idx];
+}
 
-    <footer class="site-footer">
-      <span>음운 변동 학습 도구 · 국어 문법</span>
-    </footer>
-  </main>
+function nextQuestion() {
+  resultMsg.textContent = "";
+  resultMsg.className = "result-msg";
+  currentQ = getRandomQuestion();
+  renderChain(currentQ);
+  gradeBtn.disabled = false;
+  gradeBtn.textContent = "채점하기";
+  updateProgress();
+}
 
-  <script src="script.js"></script>
-</body>
-</html>
+function renderChain(q) {
+  wordChain.innerHTML = "";
+
+  // 초기 단어
+  const startNode = document.createElement("div");
+  startNode.className = "chain-node origin";
+  startNode.innerHTML = `<span class="word-text">${q.word}</span><span class="word-label">원래 단어</span>`;
+  wordChain.appendChild(startNode);
+
+  // 각 단계
+  q.steps.forEach((step, i) => {
+    // 화살표
+    const arrow = document.createElement("div");
+    arrow.className = "chain-arrow";
+    arrow.innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20"><path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    wordChain.appendChild(arrow);
+
+    // 입력 노드
+    const node = document.createElement("div");
+    node.className = "chain-node input-node";
+
+    const wordInput = document.createElement("input");
+    wordInput.type = "text";
+    wordInput.className = "word-input";
+    wordInput.setAttribute("data-step", i);
+    wordInput.setAttribute("autocomplete", "off");
+    wordInput.setAttribute("autocorrect", "off");
+    wordInput.setAttribute("spellcheck", "false");
+    wordInput.placeholder = "발음";
+    wordInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") gradeAnswers();
+    });
+
+    const ruleInput = document.createElement("input");
+    ruleInput.type = "text";
+    ruleInput.className = "rule-input";
+    ruleInput.setAttribute("data-step", i);
+    ruleInput.setAttribute("autocomplete", "off");
+    ruleInput.setAttribute("autocorrect", "off");
+    ruleInput.setAttribute("spellcheck", "false");
+    ruleInput.placeholder = step.rule; // 힌트로 규칙 표시
+    ruleInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") gradeAnswers();
+    });
+
+    const label = document.createElement("span");
+    label.className = "word-label";
+    label.textContent = `${i + 1}단계`;
+
+    node.appendChild(wordInput);
+    node.appendChild(ruleInput);
+    node.appendChild(label);
+    wordChain.appendChild(node);
+  });
+}
+
+function gradeAnswers() {
+  if (!currentQ) return;
+  const wordInputs = wordChain.querySelectorAll(".word-input");
+  const ruleInputs = wordChain.querySelectorAll(".rule-input");
+
+  let allCorrect = true;
+  let anyAnswered = false;
+
+  currentQ.steps.forEach((step, i) => {
+    const wi = wordInputs[i];
+    const ri = ruleInputs[i];
+
+    const wordVal = wi.value.trim();
+    const ruleVal = ri.value.trim();
+
+    // 최소 하나라도 입력했는지 확인
+    if (wordVal || ruleVal) anyAnswered = true;
+
+    const wordOk = wordVal === step.result;
+    const ruleOk = ruleVal === step.rule;
+
+    // 발음 채점
+    wi.classList.remove("correct", "wrong", "empty");
+    if (!wordVal) {
+      wi.classList.add("empty");
+      allCorrect = false;
+    } else if (wordOk) {
+      wi.classList.add("correct");
+    } else {
+      wi.classList.add("wrong");
+      allCorrect = false;
+    }
+
+    // 규칙 채점
+    ri.classList.remove("correct", "wrong", "empty");
+    if (!ruleVal) {
+      ri.classList.add("empty");
+      allCorrect = false;
+    } else if (ruleOk) {
+      ri.classList.add("correct");
+    } else {
+      ri.classList.add("wrong");
+      allCorrect = false;
+    }
+  });
+
+  if (!anyAnswered) {
+    showResult("빈칸을 채워주세요!", "warn");
+    return;
+  }
+
+  scoreTotal++;
+  elTotal.textContent = scoreTotal;
+
+  if (allCorrect) {
+    scoreCorrect++;
+    streak++;
+    elCorrect.textContent = scoreCorrect;
+    elStreak.textContent = streak;
+    showResult("🎉 완벽해요! 모두 정답입니다!", "success");
+    gradeBtn.disabled = true;
+    setTimeout(() => nextQuestion(), 1600);
+  } else {
+    streak = 0;
+    elStreak.textContent = 0;
+    showResult("틀린 칸이 있어요. 다시 확인해보세요.", "error");
+  }
+}
+
+function showAnswer() {
+  if (!currentQ) return;
+  const wordInputs = wordChain.querySelectorAll(".word-input");
+  const ruleInputs = wordChain.querySelectorAll(".rule-input");
+  currentQ.steps.forEach((step, i) => {
+    wordInputs[i].value = step.result;
+    ruleInputs[i].value = step.rule;
+    wordInputs[i].classList.add("revealed");
+    ruleInputs[i].classList.add("revealed");
+  });
+  showResult("정답을 확인하세요.", "info");
+}
+
+function showResult(msg, type) {
+  resultMsg.textContent = msg;
+  resultMsg.className = "result-msg " + type;
+}
+
+function updateProgress() {
+  const pct = (usedIndices.length / QUIZ_DATA.length) * 100;
+  progressBar.style.width = pct + "%";
+}
+
+}); // end DOMContentLoaded
