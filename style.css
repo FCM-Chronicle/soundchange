@@ -263,32 +263,33 @@ body {
 .word-input:focus { border-bottom-color: var(--gold); }
 .word-input::placeholder { color: #ccc; font-weight: 400; font-size: .9rem; }
 
-.rule-input {
-  font-size: .75rem; font-weight: 500;
-  color: var(--ink-soft);
-  padding: .1rem .3rem;
-  border-radius: 4px;
+.rule-badge {
+  font-size: .72rem; font-weight: 600;
+  color: var(--ink);
   background: var(--paper-2);
+  border-radius: 5px;
+  padding: .15rem .5rem;
+  letter-spacing: .04em;
+  text-align: center;
+  display: inline-block;
 }
-.rule-input::placeholder { color: #bbb; }
-.rule-input:focus { background: #ede8ff; }
 
 /* 채점 상태 */
-.word-input.correct, .rule-input.correct {
+.word-input.correct {
   background: #eafaf0 !important;
   color: var(--green) !important;
   border-radius: 4px;
 }
-.word-input.wrong, .rule-input.wrong {
+.word-input.wrong {
   background: #fdecea !important;
   color: var(--red) !important;
   border-radius: 4px;
 }
-.word-input.empty, .rule-input.empty {
+.word-input.empty {
   background: #fff3cd !important;
   border-radius: 4px;
 }
-.word-input.revealed, .rule-input.revealed {
+.word-input.revealed {
   background: #ece6ff !important;
   color: var(--reveal) !important;
   border-radius: 4px;
