@@ -6,9 +6,9 @@ const QUIZ_DATA = [
   { "word": "겉늙다", "steps": [{ "result": "걷늑다", "rule": "끝+단" }, { "result": "걷늑따", "rule": "된소리되기" }, { "result": "건늑따", "rule": "비음화" }] },
   { "word": "값있다", "steps": [{ "result": "갑읻다", "rule": "단+끝" }, { "result": "가빋따", "rule": "된소리되기" }] },
   { "word": "값없다", "steps": [{ "result": "갑업다", "rule": "단+끝" }, { "result": "가법따", "rule": "된소리되기" }] },
-  { "word": "넓적하다", "steps": [{ "result": "넙적하다", "rule": "자음군단순화" }, { "result": "넙쩌카다", "rule": "된+축" }] },
-  { "word": "넓적하니", "steps": [{ "result": "넙적하니", "rule": "자음군단순화" }, { "result": "넙쩌카니", "rule": "된+축" }] },
-  { "word": "굵다랗다", "steps": [{ "result": "국다라타", "rule": "단+축" }, { "result": "국따라타", "rule": "된소리되기" }] },
+  { "word": "넓적하다", "steps": [{ "result": "넙적하다", "rule": "자음군단순화" }, { "result": "넙쩌카다", "rule": "된소리되기 및 거센소리되기" }] },
+  { "word": "넓적하니", "steps": [{ "result": "넙적하니", "rule": "자음군단순화" }, { "result": "넙쩌카니", "rule": "된소리되기 및 거센소리되기" }] },
+  { "word": "굵다랗다", "steps": [{ "result": "국다라타", "rule": "자음군단순화 및 거센소리되기" }, { "result": "국따라타", "rule": "된소리되기" }] },
   { "word": "급행열차", "steps": [{ "result": "급행녈차", "rule": "ㄴ첨가" }, { "result": "그팽녈차", "rule": "거센소리되기" }] },
   { "word": "설익다", "steps": [{ "result": "설닉다", "rule": "ㄴ첨가" }, { "result": "설릭다", "rule": "유음화" }, { "result": "설릭따", "rule": "된소리되기" }] },
   { "word": "낱낱이", "steps": [{ "result": "낟나티", "rule": "끝소리변화" }, { "result": "난나티", "rule": "비음화" }, { "result": "난나치", "rule": "구개음화" }] },
@@ -32,9 +32,9 @@ const QUIZ_DATA = [
   { "word": "닭잡다", "steps": [{ "result": "닥잡다", "rule": "자음군단순화" }, { "result": "닥짭따", "rule": "된소리되기" }] },
   { "word": "맑디맑다", "steps": [{ "result": "막디막다", "rule": "자음군단순화" }, { "result": "막띠막따", "rule": "된소리되기" }] },
   { "word": "읽고쓰다", "steps": [{ "result": "일고쓰다", "rule": "자음군단순화" }, { "result": "일꼬쓰다", "rule": "된소리되기" }] },
-  { "word": "넓죽하다", "steps": [{ "result": "넙죽하다", "rule": "자음군단순화" }, { "result": "넙쭈카다", "rule": "된+축" }] },
+  { "word": "넓죽하다", "steps": [{ "result": "넙죽하다", "rule": "자음군단순화" }, { "result": "넙쭈카다", "rule": "된소리되기 및 거센소리되기" }] },
   { "word": "밝디밝다", "steps": [{ "result": "박디박다", "rule": "자음군단순화" }, { "result": "박띠박따", "rule": "된소리되기" }] },
-  { "word": "굵직하다", "steps": [{ "result": "국직하다", "rule": "자음군단순화" }, { "result": "국찌카다", "rule": "된+축" }] },
+  { "word": "굵직하다", "steps": [{ "result": "국직하다", "rule": "자음군단순화" }, { "result": "국찌카다", "rule": "된소리되기 및 거센소리되기" }] },
   { "word": "긁적거리다", "steps": [{ "result": "극적거리다", "rule": "자음군단순화" }, { "result": "극쩍꺼리다", "rule": "된소리되기" }] },
   { "word": "얹히다", "steps": [{ "result": "언치다", "rule": "거센소리되기" }] },
   { "word": "앉히다", "steps": [{ "result": "안치다", "rule": "거센소리되기" }] },
@@ -49,8 +49,8 @@ const QUIZ_DATA = [
   { "word": "값나가다", "steps": [{ "result": "갑나가다", "rule": "자음군단순화" }, { "result": "감나가다", "rule": "비음화" }] },
   { "word": "닭볶음", "steps": [{ "result": "닥뽀끔", "rule": "단+된" }] },
   { "word": "삶아먹다", "steps": [{ "result": "살마먹따", "rule": "된소리되기" }] },
-  { "word": "끝맺다", "steps": [{ "result": "끋맺다", "rule": "끝소리변화" }, { "result": "끈맺다", "rule": "비음화" }, { "result": "끈맫따", "rule": "끝+된" }] },
-  { "word": "꽃잎", "steps": [{ "result": "꼳잎", "rule": "끝소리변화" }, { "result": "꼳닙", "rule": "ㄴ+끝" }, { "result": "꼰닙", "rule": "비음화" }] },
+  { "word": "끝맺다", "steps": [{ "result": "끋맺다", "rule": "끝소리변화" }, { "result": "끈맺다", "rule": "비음화" }, { "result": "끈맫따", "rule": "끝소리변화 및 된소리되기" }] },
+  { "word": "꽃잎", "steps": [{ "result": "꼳잎", "rule": "끝소리변화" }, { "result": "꼳닙", "rule": "ㄴ첨가 및 끝소리변화" }, { "result": "꼰닙", "rule": "비음화" }] },
   { "word": "물약", "steps": [{ "result": "물냑", "rule": "ㄴ첨가" }, { "result": "물략", "rule": "유음화" }] },
   { "word": "막일", "steps": [{ "result": "막닐", "rule": "ㄴ첨가" }, { "result": "망닐", "rule": "비음화" }] },
   { "word": "색연필", "steps": [{ "result": "색년필", "rule": "ㄴ첨가" }, { "result": "생년필", "rule": "비음화" }] },
@@ -91,7 +91,7 @@ const QUIZ_DATA = [
   { "word": "꽃망울", "steps": [{ "result": "꼳망울", "rule": "음절의 끝소리 규칙" }, { "result": "꼰망울", "rule": "비음화" }] },
   { "word": "십육", "steps": [{ "result": "십뉵", "rule": "ㄴ 첨가" }, { "result": "심뉵", "rule": "비음화" }] },
   { "word": "깻잎", "steps": [{ "result": "깯잎", "rule": "음절의 끝소리 규칙" }, { "result": "깯닙", "rule": "ㄴ 첨가 및 음절의 끝소리 규칙" }, { "result": "깬닙", "rule": "비음화" }] },
-  { "word": "나뭇잎", "steps": [{ "result": "나묻잎", "rule": "음절의 끝소리 규칙" }, { "result": "나묻닙", "rule": "ㄴ 첨가 및 음절의 끝소리 규칙" }, { "result": "나문닙", "rule": "비음화" }] },
+  { "word": "나뭇잎", "steps": [{ "result": "나묻잎", "rule": "음절의 끝소리 규칙" }, { "result": "나묻닙", "rule": "ㄴ 첨가  음절의 끝소리 규칙" }, { "result": "나문닙", "rule": "비음화" }] },
   { "word": "헛웃음", "steps": [{ "result": "허두슴", "rule": "음절의 끝소리 규칙 및 연음" }] },
   { "word": "맛없다", "steps": [{ "result": "맏업다", "rule": "음절의 끝소리 규칙 및 자음군 단순화" }, { "result": "마덥따", "rule": "된소리되기 및 연음" }] },
   { "word": "멋있다", "steps": [{ "result": "멷읻다", "rule": "음절의 끝소리 규칙 및 자음군 단순화" }, { "result": "머딛따", "rule": "된소리되기 및 연음" }] },
@@ -261,7 +261,7 @@ function renderChain(q) {
 
     const label = document.createElement("span");
     label.className = "word-label";
-    label.textContent = `${i + 1}단계`;
+    label.textContent = `${i  1}단계`;
 
     node.appendChild(wordInput);
     node.appendChild(ruleInput);
