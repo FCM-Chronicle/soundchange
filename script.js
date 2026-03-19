@@ -129,7 +129,7 @@ const QUIZ_DATA = [
   { "word": "여덟 권", "steps": [{ "result": "여덜 권", "rule": "자음군 단순화" }, { "result": "여덜 꿘", "rule": "된소리되기" }] },
   { "word": "닭갈비", "steps": [{ "result": "닥갈비", "rule": "자음군 단순화" }, { "result": "닥깔비", "rule": "된소리되기" }] },
   { "word": "못잊어", "steps": [{ "result": "몯읻어", "rule": "음절의 끝소리 규칙" }, { "result": "모디저", "rule": "연음" }] },
-  { "word": "꽃여름", "steps": [{ "result": "꼳여름", "rule": "음절의 끝소리 규칙" }, { "result": "꼳녀름", "rule": "ㄴ 첨가" }, { "result": "꼰녀름", "rule": "비음화" }] }
+  { "word": "꽃여름", "steps": [{ "result": "꼳여름", "rule": "음절의 끝소리 규칙" }, { "result": "꼳녀름", "rule": "ㄴ 첨가" }, { "result": "꼰녀름", "rule": "비음화" }] },
 
 ];
 
