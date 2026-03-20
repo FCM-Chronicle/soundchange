@@ -261,7 +261,7 @@ function renderChain(q) {
 
     const label = document.createElement("span");
     label.className = "word-label";
-    label.textContent = `${i  1}단계`;
+    label.textContent = `${i + 1}단계`;
 
     node.appendChild(wordInput);
     node.appendChild(ruleInput);
